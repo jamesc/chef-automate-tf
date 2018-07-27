@@ -1,3 +1,4 @@
+aws/output/*
 *.lock.info
 terraform.tfstate.backup
 terraform.tfstate

@@ -79,7 +79,6 @@ resource "aws_instance" "chef_automate" {
       "sudo chef-automate deploy /etc/chef-automate/config.toml --accept-terms-and-mlsa",
       "sudo chown centos:centos /home/centos/automate-credentials.toml",
       "sudo echo -e \"api-token = \"$(sudo chef-automate admin-token) >> automate-credentials.toml",
-      "sudo cat /home/centos/automate-credentials.toml",
     ]
   }
 }
@@ -90,7 +89,7 @@ resource "null_resource" "get_credentials" {
     command = <<CMD
     scp -i ${var.aws_key_pair_file} -o StrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null \
       ${var.aws_centos_image_user}@${data.aws_eip.chef_automate.public_ip}:automate-credentials.toml \
-      output-automate-credentials.toml
+      output/automate-credentials.toml
     CMD
   }
   depends_on = ["aws_eip_association.chef_automate"]
@@ -98,18 +97,18 @@ resource "null_resource" "get_credentials" {
 
 module "server_password" {
   source = "matti/resource/shell"
-  command = "cat output-automate-credentials.toml|grep password|cut -c12-|sed -e 's/^\"//' -e 's/\"$//'"
+  command = "cat output/automate-credentials.toml|grep password|cut -c12-|sed -e 's/^\"//' -e 's/\"$//'"
   depends_id = "${null_resource.get_credentials.id}"
 }
 
 module "server_username" {
   source = "matti/outputs/shell"
-  command = "cat output-automate-credentials.toml|grep username|cut -c12-|sed -e 's/^\"//' -e 's/\"$//'"
+  command = "cat output/automate-credentials.toml|grep username|cut -c12-|sed -e 's/^\"//' -e 's/\"$//'"
   depends_id = "${null_resource.get_credentials.id}"
 }
 
 module "server_api_token" {
   source = "matti/outputs/shell"
-  command = "cat output-automate-credentials.toml|grep api-token|cut -c13-"
+  command = "cat output/automate-credentials.toml|grep api-token|cut -c13-"
   depends_id = "${null_resource.get_credentials.id}"
 }
