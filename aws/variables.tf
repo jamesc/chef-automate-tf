@@ -61,15 +61,15 @@ variable "automate_server_instance_type" {
   default = "m4.xlarge"
 }
 
-// Point at an pre-existing EIP. If this is
-// false we'll just use the allocated public IP of the
-// EC instance
+
 variable "automate_eipalloc_id" {
-  default = false
+}
+
+variable "chef_server_eipalloc_id" {
 }
 
 /////////////////////////////////
-// Automate 2 Configuration
+// Secrets
 variable "admin_email" {
   default = "admin@example.com"
 }
@@ -78,9 +78,15 @@ variable "admin_username" {
   default = "admin"
 }
 
+variable "admin_user" {
+  default = "The Boss"
+}
 variable "admin_password" {
   default = "ThisIsVerySecretPassword"
 }
+
+/////////////////////////////////
+// Automate 2 Configuration
 
 variable "automate_host_name" {
   default = "automate"
@@ -94,4 +100,16 @@ variable "automate_domain_name" {
 // Automate Keys and Licenses
 variable "automate_license" {
   description = "Contact Chef Sales at sales@chef.io to request a license."
+}
+
+
+////////////////////////////////
+// Chef Server configuration
+
+variable "chef_server_host_name" {
+  default = "chef"
+}
+
+variable "chef_server_domain_name" {
+  default = "example.com"
 }

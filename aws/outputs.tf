@@ -14,6 +14,13 @@ output "chef_automate_password" {
   value = "${module.chef_automate.server_password}"
 }
 
+output "chef_server_username" {
+  value = "${var.admin_username}"
+}
+
+output "chef_server_password" {
+  value = "${var.admin_password}"
+}
 output "aws_vpc_id" {
   value = "${module.vpc.vpc_id}"
 }

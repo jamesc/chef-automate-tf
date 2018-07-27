@@ -38,7 +38,7 @@ resource "aws_instance" "chef_automate" {
   }
 
   ami                    = "${data.aws_ami.centos.id}"
-  instance_type          = "${var.automate_server_instance_type}"
+  instance_type          = "${var.server_instance_type}"
   key_name               = "${var.aws_key_pair_name}"
   subnet_id              = "${var.subnet_id}"
   vpc_security_group_ids = ["${aws_security_group.chef_automate.id}"]

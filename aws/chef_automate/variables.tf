@@ -32,7 +32,7 @@ variable "tag_ttl" {}
 variable "aws_key_pair_file" {}
 variable "aws_key_pair_name" {}
 
-variable "automate_server_instance_type" {
+variable "server_instance_type" {
   default = "m4.xlarge"
 }
 
