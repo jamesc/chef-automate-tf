@@ -15,53 +15,24 @@ variable "aws_centos_image_user" {
   default = "centos"
 }
 
-variable "aws_image_user" {
-  default = "ubuntu"
-}
-
 ////////////////////////////////
 // Tags
 
-variable "tag_customer" {
-  default = "chef"
-}
-
-variable "tag_project" {
-  default = "chef"
-}
-
-variable "tag_name" {
-  default = "chef"
-}
-
-variable "tag_dept" {
-  default = "engineering"
-}
-
-variable "tag_contact" {
-  default = "admin@example.com"
-}
-
-variable "tag_application" {
-  default = "Chef Automate 2"
-}
-
-variable "tag_ttl" {
-  default = 3600
-}
+variable "tag_customer" {}
+variable "tag_project" {}
+variable "tag_name" {}
+variable "tag_dept" {}
+variable "tag_contact" {}
+variable "tag_application" {}
+variable "tag_ttl" {}
 
 ////////////////////////////////
 // AWS Configuration
 
-variable "aws_key_pair_file" {
-  default = "~/.ssh/ec2-keypair.key"
-}
+variable "aws_key_pair_file" {}
+variable "aws_key_pair_name" {}
 
-variable "aws_key_pair_name" {
-  default = "ec2-keypair"
-}
-
-variable "automate_server_instance_type" {
+variable "server_instance_type" {
   default = "m4.xlarge"
 }
 
@@ -73,11 +44,9 @@ variable "subnet_id" {
   default = ""
 }
 
-// Point at an  pre-existing EIP. If this is
-// false we'll just use the allocated public IP of the
-// EC instance
+
 variable "eipalloc_id" {
-  default = false
+  description = "ID of the EIP for the Chef Automate server (must be already allocated)"
 }
 
 /////////////////////////////////
@@ -94,11 +63,11 @@ variable "admin_password" {
   default = "ThisIsVerySecretPassword"
 }
 
-variable "automate_host_name" {
+variable "host_name" {
   default = "automate"
 }
 
-variable "automate_domain_name" {
+variable "domain_name" {
   default = "example.com"
 }
 
@@ -135,5 +104,4 @@ variable "frontend_key" {
   description = <<EOF
 Corresponding key for the Frontend Loadbalancer.
 EOF
-
 }
