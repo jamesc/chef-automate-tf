@@ -1,12 +1,8 @@
-provider "aws" {
-  region                  = "${var.aws_region}"
-  profile                 = "${var.aws_profile}"
-  shared_credentials_file = "~/.aws/credentials"
-}
-
-resource "random_id" "instance_id" {
-  byte_length = 4
-}
+// provider "aws" {
+//   region                  = "${var.aws_region}"
+//   profile                 = "${var.aws_profile}"
+//   shared_credentials_file = "~/.aws/credentials"
+// }
 
 resource "aws_vpc" "automate-vpc" {
   cidr_block = "10.0.0.0/16"
