@@ -84,7 +84,7 @@ resource "aws_instance" "chef_automate" {
 }
 
 // Workaround to get back the various parameters created by Chef Automate
-resource "null_resource" "get_credentials" {
+resource "null_resource" "get_automate_credentials" {
   provisioner "local-exec" {
     command = <<CMD
     scp -i ${var.aws_key_pair_file} -o StrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null \
@@ -98,17 +98,17 @@ resource "null_resource" "get_credentials" {
 module "server_password" {
   source = "matti/resource/shell"
   command = "cat output/automate-credentials.toml|grep password|cut -c12-|sed -e 's/^\"//' -e 's/\"$//'"
-  depends_id = "${null_resource.get_credentials.id}"
+  depends_id = "${null_resource.get_automate_credentials.id}"
 }
 
 module "server_username" {
-  source = "matti/outputs/shell"
+  source = "matti/resource/shell"
   command = "cat output/automate-credentials.toml|grep username|cut -c12-|sed -e 's/^\"//' -e 's/\"$//'"
-  depends_id = "${null_resource.get_credentials.id}"
+  depends_id = "${null_resource.get_automate_credentials.id}"
 }
 
 module "server_api_token" {
-  source = "matti/outputs/shell"
+  source = "matti/resource/shell"
   command = "cat output/automate-credentials.toml|grep api-token|cut -c13-"
-  depends_id = "${null_resource.get_credentials.id}"
+  depends_id = "${null_resource.get_automate_credentials.id}"
 }

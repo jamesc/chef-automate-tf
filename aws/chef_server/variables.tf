@@ -70,6 +70,10 @@ variable "domain_name" {
   default = "example.com"
 }
 
+variable "version" {
+  default = "12.17.33"
+}
+
 ///////////////////////
 // Automate data collector
 variable "automate_host_name" {}
