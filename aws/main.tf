@@ -83,6 +83,7 @@ module chef_server {
   automate_domain_name = "${var.automate_domain_name}"
   automate_api_token = "${module.chef_automate.server_api_token}"
 
+  version = "${chef_server_version}"
   admin_username = "${var.admin_username}"
   admin_password = "${var.admin_password}"
   admin_email = "${var.admin_email}"

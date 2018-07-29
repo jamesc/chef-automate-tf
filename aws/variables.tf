@@ -99,6 +99,7 @@ variable "automate_domain_name" {
 ////////////////////////////////
 // Automate Keys and Licenses
 variable "automate_license" {
+  default = ""
   description = "Contact Chef Sales at sales@chef.io to request a license."
 }
 
@@ -112,4 +113,8 @@ variable "chef_server_host_name" {
 
 variable "chef_server_domain_name" {
   default = "example.com"
+}
+
+variable "chef_server_version" {
+  default = "12.17.33"
 }

@@ -2,6 +2,7 @@ data "template_file" "chef_bootstrap" {
   template = "${file("${path.module}/templates/chef_bootstrap.tpl")}"
 
   vars {
+    version = "12.17.33"
     admin_username = "${var.admin_username}"
     admin_user = "${var.admin_user}"
     admin_password = "${var.admin_password}"
@@ -78,3 +79,25 @@ resource "aws_instance" "chef_server" {
   }
 }
 
+// Workaround to get back the various parameters created by Chef Automate
+resource "null_resource" "get_chef_user_credentials" {
+  provisioner "local-exec" {
+    command = <<CMD
+    scp -i ${var.aws_key_pair_file} -o StrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null \
+      ${var.aws_centos_image_user}@${data.aws_eip.chef_server.public_ip}:/tmp/${var.admin_username}.pem \
+      output/${var.admin_username}.pem
+    CMD
+  }
+  depends_on = ["aws_eip_association.chef_server"]
+}
+
+resource "null_resource" "get_chef_validator" {
+  provisioner "local-exec" {
+    command = <<CMD
+    scp -i ${var.aws_key_pair_file} -o StrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null \
+      ${var.aws_centos_image_user}@${data.aws_eip.chef_server.public_ip}:/tmp/${var.organization_id}-validator.pem \
+      output/${var.organization_id}-validator.pem
+    CMD
+  }
+  depends_on = ["aws_eip_association.chef_server"]
+}

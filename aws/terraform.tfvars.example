@@ -8,9 +8,9 @@ aws_key_pair_name="jamesc-us-west-2"
 #
 # Tagging
 #
-tag_customer="HPE CTP"
+tag_customer="Example Customer"
 tag_project="a2-deploy"
-tag_name="a2-deploy"
+tag_name="a2-deploy-customer"
 tag_dept="partner"
 tag_contact="james@chef.io"
 
@@ -20,7 +20,7 @@ tag_contact="james@chef.io"
 admin_email="james@chef.io"
 admin_user="James Casey"
 admin_username="admin"
-admin_password="f4363cbf-a75e-49e5-8bc2-7b34583446dd"
+admin_password="SECRET GOES HERE"
 
 #
 # Chef Automate
@@ -29,7 +29,9 @@ automate_host_name="automate"
 automate_domain_name="example.com"
 automate_eipalloc_id="eipalloc-YYYYYYYYYYYYYYYYYYYYY"
 
-automate_license="Ask your Chef Sales contact for a license"
+# If you have a license, put it here. Othereisw you can sign up for a trial
+# from the Chef Automate UI
+automate_license=""
 
 #
 # Chef Server
