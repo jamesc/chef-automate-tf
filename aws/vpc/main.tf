@@ -1,9 +1,3 @@
-// provider "aws" {
-//   region                  = "${var.aws_region}"
-//   profile                 = "${var.aws_profile}"
-//   shared_credentials_file = "~/.aws/credentials"
-// }
-
 resource "aws_vpc" "automate-vpc" {
   cidr_block = "10.0.0.0/16"
 
@@ -39,5 +33,16 @@ resource "aws_subnet" "automate-subnet" {
 
   tags {
     Name = "automate-subnet"
+  }
+}
+
+
+resource "aws_subnet" "workload-subnet" {
+  vpc_id                  = "${aws_vpc.automate-vpc.id}"
+  cidr_block              = "10.0.2.0/24"
+  map_public_ip_on_launch = true
+
+  tags {
+    Name = "workload-subnet"
   }
 }
