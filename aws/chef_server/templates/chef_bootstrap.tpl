@@ -17,8 +17,9 @@ chef-server-ctl org-create ${organization_id} "${organization_name}" --associati
 
 # Data collector
 chef-server-ctl set-secret data_collector token ${automate_api_token}
-sudo chef-server-ctl restart nginx
-sudo chef-server-ctl restart opscode-erchef
+chef-server-ctl restart nginx
+chef-server-ctl restart opscode-erchef
+chef-server-ctl reconfigure
 
 # JC-  Don't install manage
 #chef-server-ctl install chef-manage
