@@ -31,7 +31,7 @@ module chef_automate {
     tag_name = "${var.tag_name}"
     tag_dept = "${var.tag_dept}"
     tag_contact = "${var.tag_contact}"
-    tag_application = "${var.tag_ttl}"
+    tag_application = "${var.tag_application}"
     tag_ttl = "${var.tag_ttl}"
 
     vpc_id = "${module.vpc.vpc_id}"
@@ -66,7 +66,7 @@ module chef_server {
   tag_name = "${var.tag_name}"
   tag_dept = "${var.tag_dept}"
   tag_contact = "${var.tag_contact}"
-  tag_application = "${var.tag_ttl}"
+  tag_application = "${var.tag_application}"
   tag_ttl = "${var.tag_ttl}"
 
   vpc_id = "${module.vpc.vpc_id}"
@@ -104,7 +104,7 @@ module "workload" {
   tag_name = "${var.tag_name}"
   tag_dept = "${var.tag_dept}"
   tag_contact = "${var.tag_contact}"
-  tag_application = "${var.tag_ttl}"
+  tag_application = "${var.tag_application}"
   tag_ttl = "${var.tag_ttl}"
 
   vpc_id = "${module.vpc.vpc_id}"
