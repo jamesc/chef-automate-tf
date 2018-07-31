@@ -38,7 +38,14 @@ output "aws_vpc_id" {
   value = "${module.vpc.vpc_id}"
 }
 
-output "aws_subnet_id" {
-  value = "${module.vpc.subnet_id}"
+output "aws_automate_subnet_id" {
+  value = "${module.vpc.automate_subnet_id}"
 }
 
+output "aws_workload_subnet_id" {
+  value = "${module.vpc.workload_subnet_id}"
+}
+
+output "workload_public_ip" {
+  value = "${module.workload.app_server_public_ip}"
+}

@@ -5,3 +5,8 @@ output "server_fqdn" {
 output "server_public_ip" {
   value = "${data.aws_eip.chef_server.public_ip}"
 }
+
+// For dependencies
+output "server_ready" {
+  value = "${null_resource.chef_server_ready.id}"
+}

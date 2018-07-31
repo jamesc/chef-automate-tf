@@ -9,8 +9,9 @@ mkdir -p /etc/opscode/
 mv /tmp/chef-server.rb /etc/opscode
 chmod 600 /etc/opscode
 
-
-chef-server-ctl reconfigure
+echo "Running chef-server-ctl reconfigure..."
+chef-server-ctl reconfigure >/dev/null 2>&1
+echo "Done"
 
 chef-server-ctl user-create ${admin_username} ${admin_user} ${admin_email} ${admin_password} --filename /tmp/${admin_username}.pem
 chef-server-ctl org-create ${organization_id} "${organization_name}" --association_user ${admin_username} --filename /tmp/${organization_id}-validator.pem
@@ -19,7 +20,9 @@ chef-server-ctl org-create ${organization_id} "${organization_name}" --associati
 chef-server-ctl set-secret data_collector token ${automate_api_token}
 chef-server-ctl restart nginx
 chef-server-ctl restart opscode-erchef
-chef-server-ctl reconfigure
+echo "Running final chef-server-ctl reconfigure.."
+chef-server-ctl reconfigure >/dev/null 2>&1
+echo "Done"
 
 # JC-  Don't install manage
 #chef-server-ctl install chef-manage

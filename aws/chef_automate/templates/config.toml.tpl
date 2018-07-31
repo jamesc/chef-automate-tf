@@ -17,10 +17,8 @@
     upgrade_strategy = "at-once"
     deployment_type = "local"
     [deployment.v1.svc.admin_user]
-      # Default admin user settings
       email = "${admin_email}"
       username = "${admin_username}"
-      password = "${admin_password}"
 
 # Load Balancer service configuration.
 [load_balancer]

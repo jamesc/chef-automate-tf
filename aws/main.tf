@@ -31,11 +31,11 @@ module chef_automate {
     tag_name = "${var.tag_name}"
     tag_dept = "${var.tag_dept}"
     tag_contact = "${var.tag_contact}"
-    tag_application = "${var.tag_ttl}"
+    tag_application = "${var.tag_application}"
     tag_ttl = "${var.tag_ttl}"
 
     vpc_id = "${module.vpc.vpc_id}"
-    subnet_id = "${module.vpc.subnet_id}"
+    subnet_id = "${module.vpc.automate_subnet_id}"
 
     aws_key_pair_file = "${var.aws_key_pair_file}"
     aws_key_pair_name = "${var.aws_key_pair_name}"
@@ -66,11 +66,11 @@ module chef_server {
   tag_name = "${var.tag_name}"
   tag_dept = "${var.tag_dept}"
   tag_contact = "${var.tag_contact}"
-  tag_application = "${var.tag_ttl}"
+  tag_application = "${var.tag_application}"
   tag_ttl = "${var.tag_ttl}"
 
   vpc_id = "${module.vpc.vpc_id}"
-  subnet_id = "${module.vpc.subnet_id}"
+  subnet_id = "${module.vpc.automate_subnet_id}"
 
   aws_key_pair_file = "${var.aws_key_pair_file}"
   aws_key_pair_name = "${var.aws_key_pair_name}"
@@ -88,5 +88,33 @@ module chef_server {
   admin_password = "${var.admin_password}"
   admin_email = "${var.admin_email}"
   admin_user = "${var.admin_user}"
+}
 
+resource "null_resource" "chef_server_ready" {
+  triggers {
+    chef_server_ready = "${module.chef_server.server_ready}"
+  }
+}
+
+module "workload" {
+  source = "./workload"
+
+  tag_customer = "${var.tag_customer}"
+  tag_project = "${var.tag_project}"
+  tag_name = "${var.tag_name}"
+  tag_dept = "${var.tag_dept}"
+  tag_contact = "${var.tag_contact}"
+  tag_application = "${var.tag_application}"
+  tag_ttl = "${var.tag_ttl}"
+
+  vpc_id = "${module.vpc.vpc_id}"
+  subnet_id = "${module.vpc.workload_subnet_id}"
+
+  aws_key_pair_file = "${var.aws_key_pair_file}"
+  aws_key_pair_name = "${var.aws_key_pair_name}"
+
+  chef_server = "${var.chef_server_host_name}.${var.chef_server_domain_name}"
+  admin_username = "${var.admin_username}"
+
+  chef_server_ready = "${null_resource.chef_server_ready.id}"
 }

@@ -101,3 +101,12 @@ resource "null_resource" "get_chef_validator" {
   }
   depends_on = ["aws_eip_association.chef_server"]
 }
+
+// This is the last resource that should be make ready inside the module
+resource "null_resource" "chef_server_ready" {
+  triggers {
+    user_credentials_id = "${null_resource.get_chef_user_credentials.id}"
+    validator_id = "${null_resource.get_chef_validator.id}"
+  }
+
+}

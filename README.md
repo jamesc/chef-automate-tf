@@ -60,7 +60,7 @@ chef_server_username = admin
 
 The `aws/output` directory will contain the following:
 
-* `automate-credentials.toml`: A copy of the Chef Automate user credentials created during the installation process  
+* `automate-credentials.toml`: A copy of the Chef Automate user credentials created during the installation process
 * `<admin_username>.pem`: The Chef client pem file for the admin user
 * `<org>-validator.pem`: The Validator key for the Chef Server org that was created
 ## License
