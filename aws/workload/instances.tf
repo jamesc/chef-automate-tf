@@ -23,10 +23,9 @@ resource "aws_instance" "production" {
     X-TTL         = "${var.tag_ttl}"
   }
 
-
   provisioner "remote-exec" {
     inline = [
-      "sudo hostname app1",
+      "sudo hostname ${var.workload_hostname}",
 
     ]
   }
@@ -34,11 +33,11 @@ resource "aws_instance" "production" {
   provisioner "chef" {
     environment     = "_default"
     run_list        = []
-    node_name       = "app1"
+    node_name       = "${var.workload_hostname}"
     server_url      = "https://${var.chef_server}/organizations/${var.chef_organization_id}/"
     recreate_client = true
     user_name       = "${var.admin_username}"
-    user_key        = "${file("output/${var.admin_username}.pem")}"
+    user_key        = "${var.admin_private_key}"
     #version         = "14.4.17"
 
     ssl_verify_mode = ":verify_peer"

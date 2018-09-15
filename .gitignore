@@ -1,4 +1,6 @@
-aws/output/*
+output/*.pub
+output/*.pem
+output/automate-credentials.toml
 *.lock.info
 terraform.tfstate.backup
 terraform.tfstate

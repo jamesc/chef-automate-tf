@@ -10,10 +10,15 @@ variable "admin_username" {
     default = "admin"
 }
 
+variable "admin_private_key" {}
+
 variable "workload_run_list_item" {
     default = "recipe[hab_national_parks]"
 }
 
+variable "workload_hostname" {
+  default = "app1"
+}
 
 ////////////////////////////////
 // Server Settings

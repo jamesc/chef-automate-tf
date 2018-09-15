@@ -31,5 +31,4 @@ resource "tls_self_signed_cert" "chef_automate" {
       common_name  = "${var.automate_domain_name}"
       organization = "${var.automate_domain_name}"
   }
-
 }

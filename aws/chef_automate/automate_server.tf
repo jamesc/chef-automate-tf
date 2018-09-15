@@ -92,6 +92,12 @@ resource "null_resource" "get_automate_credentials" {
       output/automate-credentials.toml
     CMD
   }
+
+  provisioner "local-exec" "cleanup file" {
+    when = "destroy"
+    command = "rm -f output/automate-credentials.toml"
+  }
+
   depends_on = ["aws_eip_association.chef_automate"]
 }
 

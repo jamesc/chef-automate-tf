@@ -115,6 +115,7 @@ module "workload" {
 
   chef_server = "${var.chef_server_host_name}.${var.chef_server_domain_name}"
   admin_username = "${var.admin_username}"
+  admin_private_key = "${module.chef_server.server_admin_private_key}"
 
   chef_server_ready = "${null_resource.chef_server_ready.id}"
 }

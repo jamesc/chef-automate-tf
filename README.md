@@ -17,10 +17,13 @@ If you have one, you can supply a Chef Automate license key.  If one is not supp
 There is a minimal example configuration in `aws/terraform.tfvars.example`.
 
 ## Install Chef Automate
-Run `terraform apply` to create all the infrastructure.
+* Run `terraform init <CLOUD>` to setup terraform modules
+
+
+* Run `terraform apply <CLOUD>` to create all the infrastructure.
 
 ```
-$ terraform apply -auto-approve
+$ terraform apply -auto-approve aws
 data.template_file.install_chef_automate_cli: Refreshing state...
 data.template_file.chef_server_rb: Refreshing state...
 data.aws_ami.centos: Refreshing state...
@@ -44,7 +47,7 @@ Apply complete! Resources: 36 added, 0 changed, 0 destroyed.
 
 ## Outputs
 
-The output configuration can be obtained via `terraform outputs`.  Also credentials and keys are dropped into the `aws/output` directory. An example output is :
+The output configuration can be obtained via `terraform outputs`.  Also credentials and keys are dropped into the `output` qirectory. An example output is :
 
 ``` terraform output
 $ terraform output
