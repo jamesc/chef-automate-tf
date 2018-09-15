@@ -37,13 +37,24 @@ resource "tls_private_key" "chef_server_admin" {
 }
 
 resource "local_file" "admin_private_key" {
-  filename = "output/${var.admin_username}.pem"
+  filename = ".chef/client.pem"
   content = "${tls_private_key.chef_server_admin.private_key_pem}"
 }
 
-resource "local_file" "admin_public_key" {
-  filename = "output/${var.admin_username}.pub"
-  content = "${tls_private_key.chef_server_admin.public_key_pem}"
+data "template_file" "knife_rb" {
+  template = "${file("${path.module}/templates/knife.rb.tpl")}"
+
+  vars {
+    host_name = "${var.host_name}"
+    domain_name = "${var.domain_name}"
+    organization_id = "${var.organization_id}"
+    admin_username = "${var.admin_username}"
+  }
+}
+
+resource "local_file" "knife_rb" {
+  filename = ".chef/knife.rb"
+  content = "${data.template_file.knife_rb.rendered}"
 }
 
 resource "aws_instance" "chef_server" {
@@ -99,29 +110,10 @@ resource "aws_instance" "chef_server" {
   }
 }
 
-// Workaround to get back the various parameters created by Chef Server
-
-resource "null_resource" "get_chef_validator" {
-  provisioner "local-exec" {
-    command = <<CMD
-    scp -i ${var.aws_key_pair_file} -o StrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null \
-      ${var.aws_centos_image_user}@${data.aws_eip.chef_server.public_ip}:/tmp/${var.organization_id}-validator.pem \
-      output/${var.organization_id}-validator.pem
-    CMD
-  }
-
-  provisioner "local-exec" {
-    when = "destroy"
-    command = "rm -f output/${var.organization_id}-validator.pem"
-  }
-
-  depends_on = ["aws_eip_association.chef_server"]
-}
-
 // This is the last resource that should be make ready inside the module
 resource "null_resource" "chef_server_ready" {
   triggers {
-    validator_id = "${null_resource.get_chef_validator.id}"
+    eip_id = "${aws_eip_association.chef_server.id}"
   }
 
 }
