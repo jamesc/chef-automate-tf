@@ -31,6 +31,21 @@ data "aws_eip" "chef_server" {
   id = "${var.eipalloc_id}"
 }
 
+resource "tls_private_key" "chef_server_admin" {
+  algorithm = "RSA"
+  rsa_bits = "2048"
+}
+
+resource "local_file" "admin_private_key" {
+  filename = "output/${var.admin_username}.pem"
+  content = "${tls_private_key.chef_server_admin.private_key_pem}"
+}
+
+resource "local_file" "admin_public_key" {
+  filename = "output/${var.admin_username}.pub"
+  content = "${tls_private_key.chef_server_admin.public_key_pem}"
+}
+
 resource "aws_instance" "chef_server" {
   connection {
     user        = "${var.aws_centos_image_user}"
@@ -61,6 +76,11 @@ resource "aws_instance" "chef_server" {
   }
 
   provisioner "file" {
+    content = "${tls_private_key.chef_server_admin.public_key_pem}"
+    destination = "/tmp/${var.admin_username}.pub"
+  }
+
+  provisioner "file" {
     destination = "/tmp/chef_bootstrap.sh"
     content     = "${data.template_file.chef_bootstrap.rendered}"
   }
@@ -79,17 +99,7 @@ resource "aws_instance" "chef_server" {
   }
 }
 
-// Workaround to get back the various parameters created by Chef Automate
-resource "null_resource" "get_chef_user_credentials" {
-  provisioner "local-exec" {
-    command = <<CMD
-    scp -i ${var.aws_key_pair_file} -o StrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null \
-      ${var.aws_centos_image_user}@${data.aws_eip.chef_server.public_ip}:/tmp/${var.admin_username}.pem \
-      output/${var.admin_username}.pem
-    CMD
-  }
-  depends_on = ["aws_eip_association.chef_server"]
-}
+// Workaround to get back the various parameters created by Chef Server
 
 resource "null_resource" "get_chef_validator" {
   provisioner "local-exec" {
@@ -99,13 +109,18 @@ resource "null_resource" "get_chef_validator" {
       output/${var.organization_id}-validator.pem
     CMD
   }
+
+  provisioner "local-exec" {
+    when = "destroy"
+    command = "rm -f output/${var.organization_id}-validator.pem"
+  }
+
   depends_on = ["aws_eip_association.chef_server"]
 }
 
 // This is the last resource that should be make ready inside the module
 resource "null_resource" "chef_server_ready" {
   triggers {
-    user_credentials_id = "${null_resource.get_chef_user_credentials.id}"
     validator_id = "${null_resource.get_chef_validator.id}"
   }
 

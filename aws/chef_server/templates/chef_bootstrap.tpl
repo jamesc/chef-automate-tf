@@ -13,7 +13,11 @@ echo "Running chef-server-ctl reconfigure..."
 chef-server-ctl reconfigure >/dev/null 2>&1
 echo "Done"
 
-chef-server-ctl user-create ${admin_username} ${admin_user} ${admin_email} ${admin_password} --filename /tmp/${admin_username}.pem
+# Use our private key
+chef-server-ctl user-create ${admin_username} ${admin_user} ${admin_email} ${admin_password} --filename /dev/null
+chef-server-ctl delete-user-key ${admin_username} default
+chef-server-ctl add-user-key ${admin_username} --key-name default --pub-key-path /tmp/${admin_username}.pub
+
 chef-server-ctl org-create ${organization_id} "${organization_name}" --association_user ${admin_username} --filename /tmp/${organization_id}-validator.pem
 
 # Data collector
