@@ -1,3 +1,4 @@
+.chef
 output/*.pub
 output/*.pem
 output/automate-credentials.toml
